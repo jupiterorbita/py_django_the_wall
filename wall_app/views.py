@@ -69,6 +69,7 @@ def wall_page(request):
     messages.error(request, "please log in", extra_tags="warning")
     return redirect('/')
   context = {
+  'current_user_obj': User.objects.get(id=request.session['user_id'] ),
   'all_messages' : Message.objects.all(),
   'all_comments' : Comment.objects.all()
   }
@@ -92,7 +93,13 @@ def post_message(request):
 
 
 def delete_message(request):
-  pass
+  print('\n-------- DELETING A MESSAGE METHOD ❌-----')
+  if request.method == "POST":
+    print(request.POST)
+    
+    Message.objects.get(id=request.POST['message_id']).delete()
+  # Message.objects.first().user.id
+  return redirect('/wall_page')
 
 
 
